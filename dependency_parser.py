@@ -4,7 +4,9 @@ def dep_parse(sentence):
 	state = initial_state(sentence)
 	while len(state["words"]) > 0:
 		user_oracle(state)
-		print state
+		print "STACK: " , state["stack"]
+		print "WORDS: " , state["words"]
+		print "RELATS: " , state["relations"]
 
 
 def initial_state(sentence):
@@ -19,11 +21,12 @@ def initial_state(sentence):
 def user_oracle(state):
 	com = raw_input("enter oracle action: ")
 
-	isvalid = False
+	isvalid = True
 
 	if com == "S" or com == "s":
 		shift(state)
-		isvalid = True
+	elif com == "L" or com == "l":
+		left(state)
 	else:
 		print "Not a valid oracle command"
 		isvalid = False
@@ -34,9 +37,21 @@ def shift(state):
 	w = state["words"].pop(0)
 	state["stack"].append(w)
 
+def left(state):
+	print "end of stack: " , state["stack"][-1]
+	if len(state["stack"]) == 0 or state["stack"][-1] == "root":
+		return False
+
+	u = state["words"][0]
+	v = state["stack"].pop()
+
+	state["relations"].append([u,v])
+
+	return True
+
 
 def main():
-	dep_parse("hi there dude!")
+	dep_parse("hi there dude man joe!")
 
 if __name__=="__main__":
 	main()
