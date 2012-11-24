@@ -27,6 +27,8 @@ def user_oracle(state):
 		shift(state)
 	elif com == "L" or com == "l":
 		left(state)
+	elif com == "R" or com == "r":
+		right(state)
 	else:
 		print "Not a valid oracle command"
 		isvalid = False
@@ -49,9 +51,21 @@ def left(state):
 
 	return True
 
+def right(state):
+	if len(state["stack"]) == 0:
+		return False
+
+	u = state["words"][0]
+	v = state["stack"].pop()
+
+	state["relations"].append([v,u])
+	state["words"][0] = v
+
+	return True
+
 
 def main():
-	dep_parse("hi there dude man joe!")
+	dep_parse("I booked a morning flight")
 
 if __name__=="__main__":
 	main()
